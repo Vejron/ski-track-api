@@ -15,43 +15,29 @@ module.exports = function (app) {
         // The callback function takes 3 parameters, an error, response status code and the html
 
         request(url, function (error, response, html) {
+            let places = [];
+
             if (!error) {
-                var $ = cheerio.load(html);
+                const $ = cheerio.load(html);
+    
+                $('tr.GridViewAltRow, tr.GridViewRow').each((i, elm) => {
+                    info = $(elm).children('td').eq(1).text().trim().split(' ');
+                    let date = new Date();
+                    if(info.length > 3) {
+                        date = Date.parse(info[info.length - 2] + ' ' + info[info.length - 1]);
+                    }
+                   
 
-                var title, release, rating;
-                var json = {
-                    title: "",
-                    release: "",
-                    rating: ""
-                };
+                    places.push({
+                        track: $(elm).children('td').eq(0).text(),
+                        date: date
+                    });
+                });
 
-                $('tr.GridViewAltRow, tr.GridViewRow').filter(function () {
-                    let data = $(this);
-                    
-                    console.log(data.children('td').first().text());
-                    /*title = data.children().first().text();
-                    release = data.children().last().children().text();
-
-                    json.title = title;
-                    json.release = release;*/
-                })
+                console.log(places);
             }
 
-            // To write to the system we will use the built in 'fs' library.
-            // In this example we will pass 3 parameters to the writeFile function
-            // Parameter 1 :  output.json - this is what the created filename will be called
-            // Parameter 2 :  JSON.stringify(json, null, 4) - the data to write, here we do an extra step by calling JSON.stringify to make our JSON easier to read
-            // Parameter 3 :  callback function - a callback function to let us know the status of our function
-
-            /*fs.writeFile('output.json', JSON.stringify(json, null, 4), function (err) {
-
-                console.log('File successfully written! - Check your project directory for the output.json file');
-
-            })*/
-
-            // Finally, we'll just send out a message to the browser reminding you that this app does not have a UI.
-            res.send(json)
-
+            res.send(places)
         });
     });
     /*app.route('/tasks/:taskId')
