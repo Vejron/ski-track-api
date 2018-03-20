@@ -1,0 +1,20 @@
+{
+  "name": "ski-track-api",
+  "version": "1.0.0",
+  "description": "Restful web scrape api adapter for umea ski track status",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Björn Yttergren",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.17.2"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.3",
+    "request": "^2.85.0"
+  }
+}
